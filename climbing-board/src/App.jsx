@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import { CRangeSlider } from '@coreui/react-pro'
+import '@coreui/coreui-pro/dist/css/coreui.min.css';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import "./App.css";
 
 const sampleRoute = {
