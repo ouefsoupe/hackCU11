@@ -44,8 +44,6 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log("data: ", data)
-
       const normalizedHolds = data.map(hold => ({
         x: Math.round((hold.x * 9)) + .5,  // Scale `x` properly to grid index
         y: GRID_COLS - Math.round(hold.y * 9)  // Scale `y` properly to grid index
@@ -54,14 +52,12 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
       const lowestYHold = normalizedHolds.reduce((min, normalizedHolds) => (normalizedHolds.y < min.y ? normalizedHolds : min), normalizedHolds[0]);
       // const lowestYHold = [...normalizedHolds].sort((a, b) => a.y - b.y)[0];
     
-      console.log("low:", lowestYHold)
       {normalizedHolds.map((hold, index) => {
         const col = hold.x;
         const row = GRID_ROWS - hold.y;
         
         // const strokeColor = hold.y === lowestYHold.y ? "#ff00ff" : "#00ffff";
         const strokeColor = Math.abs(hold.y - lowestYHold.y) < 0.1 ? "#ff00ff" : "#00ffff";
-        console.log("strokeColor:", strokeColor)
         
         return (
           <g key={index}>
@@ -89,8 +85,6 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
       })}
       
 
-      console.log("Normalized Holds:", normalizedHolds);
-
       setHolds(normalizedHolds);
     })
     .catch((err) => console.error("Error fetching route:", err));
@@ -102,6 +96,7 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
   const lowestYHold = holds.reduce((min, holds) => (holds.y < min.y ? holds : min), holds[0]);
 
   const handleSquareClick = (row, col) => {
+
     
     const key = `${row}-${col}`;
     const selectedKeys = Object.keys(activeSquares).filter(k => activeSquares[k]);
@@ -125,8 +120,8 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
     const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
     const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
     setHolds((prevHolds) => {
-      const exists = prevHolds.some((hold) => hold.cx == cx && hold.cy == cy)
-      return exists ? prevHolds.filter((hold) => hold.cx !== cx || hold.cy !== cy) : [...prevHolds, {cx, cy}];
+      const exists = prevHolds.some((hold) => hold.x == cx && hold.y == cy)
+      return exists ? prevHolds.filter((hold) => hold.x !== cx || hold.y !== cy) : [...prevHolds, {cx, cy}];
     });
   };
 
@@ -195,6 +190,8 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
           const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
           const strokeColor = Math.abs(hold.y - lowestYHold.y) < 0.1 ? "#ff00ff" : "#00ffff";
 
+          if (isNaN(cx) || isNaN(cy)) return (<></>);
+
           return (
             <g key={index}>
               <circle
@@ -217,7 +214,6 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
 export const submit = (activeSquares, sliderVal) => {
   for (const [key, val] of Object.entries(activeSquares)) {
     if(!val) continue
-    console.log(key)
     const [row, col] = key.split("-").map(Number);
       
     activeSquares.push({ row, col });
