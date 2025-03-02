@@ -258,34 +258,21 @@ function App() {
       <div className="board-container">
         {board}
       </div>
-      <h4>Select Grade:</h4>
-      <div className="slider-container">
-        <CRangeSlider
-          max={128}
-          onChange={setSliderVal}
-          labels={[
-            {
-              value: 0,
-              label: 'V0',
-            },
-            {
-              value: 128,
-              label: 'V12',
-            }
-          ]}
-          tooltipsFormat={(value) => `${0.25 * value}`}
-          value={0}
-        />
-      </div>
       <div className="generate-button">
         <Stack direction="row" spacing={2}>
-          <Button 
-            variant="contained" 
-            color="success"
-            onClick={() => submit(activeSquares, 0.25 * sliderVal)}
+        <div className="generate-button">
+          <Stack direction="row" spacing={2}>
+            <Button 
+              variant="contained"
+              color="success"
+              onClick={() => submit(activeSquares, 0.25 * sliderVal)}
+              className="generate-button"
             >
-            Generate
-          </Button>
+              Generate
+            </Button>
+          </Stack>
+        </div>
+
         </Stack>
       </div>
     </div>

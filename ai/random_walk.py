@@ -64,7 +64,7 @@ def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
 
 @app.route('/generate_route', methods=['GET'])
 def get_route():
-    start_x, start_y = 16, 10
+    start_x, start_y = 16, 8
     num_moves = 7
     sequence = generate_sequence(start_x, start_y, difficulty=4, foot=False, num_moves=num_moves)
 
