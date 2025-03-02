@@ -70,6 +70,8 @@ export function Board({route, size=BOARD_SIZE}) {
         {Array.from({ length: GRID_ROWS }).map((_, row) =>
           Array.from({ length: GRID_COLS }).map((_, col) => {
             const key = `${row}-${col}`;
+            if (col * SQUARE_SIZE + SQUARE_SIZE > BOARD_SIZE - 30) return null;
+
             return (
               <rect 
                 key = {key}
