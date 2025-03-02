@@ -42,8 +42,15 @@ export function Board({route, size=BOARD_SIZE}) {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log("Fetched holds:", data);
-      setHolds(data);
+      console.log("data: ", data)
+
+      const normalizedHolds = data.map(hold => ({
+        x: Math.round((hold.x* 8)),  // Scale `x` properly to grid index
+        y: Math.round(hold.y * 8)   // Scale `y` properly to grid index
+      }));
+      console.log("Normalized Holds:", normalizedHolds);
+
+      setHolds(normalizedHolds);
     })
     .catch((err) => console.error("Error fetching route:", err));
   }, []);
@@ -91,9 +98,6 @@ export function Board({route, size=BOARD_SIZE}) {
 
       {/* Overlay the holds using SVG */}
       <svg
-        
-        
-        
         className="overlay"
         width={size}
         height={size}
@@ -120,25 +124,45 @@ export function Board({route, size=BOARD_SIZE}) {
             );
           })
       )}
+       {/* Render fetched holds at correct positions */}
+       {holds.map((hold, index) => {
+          const col = hold.x;
+          const row = hold.y;
 
+          // Convert grid positions to actual pixel positions
+          const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
+          const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
 
-
-        {route.placements.map((hold, index) => (
-          <circle
-            key={index}
-            cx={hold.x * size * SCALE_X + X_OFFSET}
-            cy={hold.y * size * SCALE_Y + Y_OFFSET}
-            r={CIRCLE_RADIUS}
-            stroke="#00ffff"
-            strokeWidth="4"
-            fill="transparent"
-            style={{ cursor: "pointer" }}
-          />
-        ))}
+          return (
+            <g key={index}>
+              <circle
+                cx={cx}
+                cy={cy}
+                r={CIRCLE_RADIUS}
+                stroke="#00ffff"
+                strokeWidth="4"
+                fill="transparent"
+                style={{ cursor: "pointer" }}
+              />
+              {/* Render (x, y) text next to each hold */}
+              <text
+                x={cx + 20}  // Slight offset so text doesn't overlap
+                y={cy}
+                fontSize="14"
+                fill="white"
+                fontWeight="bold"
+                textAnchor="middle"
+              >
+                ({col}, {row})
+              </text>
+            </g>
+          );
+        })}
       </svg>
     </>
   );
 }
+  
 
 function App() {
   const [board, setBoard] = useState(<Board route={sampleRoute}></Board>);
@@ -152,6 +176,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;

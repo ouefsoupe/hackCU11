@@ -6,7 +6,6 @@ from flask_cors import CORS  # Import CORS
 app = Flask(__name__)
 
 CORS(app)
-
 weight_matrix = weights.get_weights()
 
 def getPossibleHolds(radius, x, y, weights, foot):
@@ -64,10 +63,11 @@ def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
 @app.route('/generate_route', methods=['GET'])
 def get_route():
     start_x, start_y = 10, 10
-    num_moves = 5
+    num_moves = 7
     sequence = generate_sequence(start_x, start_y, difficulty=10, foot=False, num_moves=num_moves)
 
     response = [{"x": x / 18, "y": y / 18} for x, y in sequence]
+
     return jsonify(response)
 
 if __name__ == '__main__':
