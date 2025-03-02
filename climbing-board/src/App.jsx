@@ -27,7 +27,7 @@ const SCALE_X = 0.95; // Fine-tune scaling
 const SCALE_Y = 0.95; // Fine-tune scaling
 const CIRCLE_RADIUS = 20; // Hold size
 
-export function Board({route, size=BOARD_SIZE}) {
+export function Board({size=BOARD_SIZE}) {
 
   const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
   const [holds, setHolds] = useState([]); // Holds for overlay circles
@@ -104,26 +104,44 @@ export function Board({route, size=BOARD_SIZE}) {
             const key = `${row}-${col}`;
             if (col * SQUARE_SIZE + SQUARE_SIZE > BOARD_SIZE - 30) return null;
 
-            return (
-              <rect 
-                key = {key}
-                x={col * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
-                y={row * SQUARE_SIZE}
-                width={SQUARE_SIZE}
-                height={SQUARE_SIZE}
-                fill={activeSquares[key] ? "rgba(0,255,0,0.5)" : "transparent"}
-                stroke="black"
-                strokeWidth="1"
-                onClick={() => handleSquareClick(row, col)}
-                style={{cursor: "pointer"}}
-              />
-            );
+            if (activeSquares[key]) {
+              // Render a green circle instead of a square
+              return (
+                <circle
+                  key={key}
+                  cx={col * SQUARE_SIZE + SQUARE_SIZE}
+                  cy={row * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
+                  r={0.45 * SQUARE_SIZE}
+                  fill="transparent"
+                  stroke="rgb(0, 255, 0)"
+                  strokeWidth="5"
+                  onClick={() => handleSquareClick(row, col)}
+                  style={{ cursor: "pointer" }}
+                />
+              );
+            } else {
+              // Render a transparent square
+              return (
+                <rect
+                  key={key}
+                  x={col * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
+                  y={row * SQUARE_SIZE}
+                  width={SQUARE_SIZE}
+                  height={SQUARE_SIZE}
+                  fill="transparent"
+                  stroke="black"
+                  strokeWidth="1"
+                  onClick={() => handleSquareClick(row, col)}
+                  style={{ cursor: "pointer" }}
+                />
+              );
+            }
           })
-      )}
+        )}
 
 
 
-        {route.placements.map((hold, index) => (
+        {/* {route.placements.map((hold, index) => (
           <circle
             key={index}
             cx={hold.x * size * SCALE_X + X_OFFSET}
@@ -134,14 +152,14 @@ export function Board({route, size=BOARD_SIZE}) {
             fill="transparent"
             style={{ cursor: "pointer" }}
           />
-        ))}
+        ))} */}
       </svg>
     </>
   );
 }
 
 function App() {
-  const [board, setBoard] = useState(<Board route={sampleRoute}></Board>);
+  const [board, setBoard] = useState(<Board></Board>);
 
   return (
     <div className="container">
