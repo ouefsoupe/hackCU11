@@ -224,17 +224,27 @@ export const submit = (activeSquares, sliderVal) => {
 
 };
 
-
 function App() {
+
   const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
   const [board, setBoard] = useState(
     <Board 
-      route={sampleRoute}
+      route={[]}
       activeSquares={activeSquares}
       setActiveSquares={setActiveSquares}
     ></Board>
   );
   const [sliderVal, setSliderVal] = useState(0); 
+
+  useEffect(() => {
+    setBoard(
+      <Board 
+      route={[]}
+      activeSquares={activeSquares}
+      setActiveSquares={setActiveSquares}
+    ></Board>
+    )
+  }, [activeSquares])
 
   return (
     <div className="container">
