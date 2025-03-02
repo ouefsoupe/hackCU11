@@ -265,7 +265,7 @@ function App() {
             <Button 
               variant="contained"
               color="success"
-              onClick={() => submit(activeSquares, 0.25 * sliderVal)}
+              onClick={() => window.location.reload()}
               className="generate-button"
             >
               Generate
