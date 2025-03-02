@@ -1,9 +1,4 @@
 import { useEffect, useState } from "react";
-import React from 'react'
-import { CRangeSlider } from '@coreui/react-pro'
-import '@coreui/coreui-pro/dist/css/coreui.min.css';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import "./App.css";
 
 const sampleRoute = {
@@ -32,9 +27,9 @@ const SCALE_X = 0.95; // Fine-tune scaling
 const SCALE_Y = 0.95; // Fine-tune scaling
 const CIRCLE_RADIUS = 20; // Hold size
 
-export function Board({route, size=BOARD_SIZE, activeSquares, setActiveSquares}) {
+export function Board({size=BOARD_SIZE}) {
 
-  
+  const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
   const [holds, setHolds] = useState([]); // Holds for overlay circles
 
   // Fetch route from Flask server
@@ -61,12 +56,12 @@ export function Board({route, size=BOARD_SIZE, activeSquares, setActiveSquares})
         console.log("hold.y: ", hold.y)
         console.log("lowesty: ", lowestYHold.y)
         const strokeColor = hold.y === lowestYHold.y ? "#ff00ff" : "#00ffff";
-        console.log(strokeColor)
+        
         return (
           <g key={index}>
             <circle
-              cx={col * SQUARE_SIZE + SQUARE_SIZE}
-              cy={row * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
+              cx={col * SQUARE_SIZE + SQUARE_SIZE} // Align circles properly
+              cy={row * SQUARE_SIZE + 0.5 * SQUARE_SIZE} // Use proper y-offset
               r={CIRCLE_RADIUS}
               stroke={strokeColor}
               strokeWidth="4"
@@ -117,7 +112,6 @@ export function Board({route, size=BOARD_SIZE, activeSquares, setActiveSquares})
       ...prev,
       [key]: !prev[key],
     }));
-
 
     const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
     const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
@@ -210,59 +204,16 @@ export function Board({route, size=BOARD_SIZE, activeSquares, setActiveSquares})
     </>
   );
 }
-
-export const submit = (activeSquares, sliderVal) => {
-  for ([key, value] of activeSquares):
-    
-}
-
+  
 
 function App() {
-  const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
-  const [board, setBoard] = useState(
-    <Board 
-      route={sampleRoute}
-      activeSquares={activeSquares}
-      setActiveSquares={activeSquares}
-    ></Board>
-  );
-  const [sliderVal, setSliderVal] = useState(0); 
+  const [board, setBoard] = useState(<Board></Board>);
 
   return (
     <div className="container">
       <h1>KiltaBord</h1>
       <div className="board-container">
         {board}
-      </div>
-      <h4>Select Grade:</h4>
-      <div className="slider-container">
-        <CRangeSlider
-          max={128}
-          onChange={setSliderVal}
-          labels={[
-            {
-              value: 0,
-              label: 'V0',
-            },
-            {
-              value: 128,
-              label: 'V12',
-            }
-          ]}
-          tooltipsFormat={(value) => `${0.25 * value}`}
-          value={0}
-        />
-      </div>
-      <div className="generate-button">
-        <Stack direction="row" spacing={2}>
-          <Button 
-            variant="contained" 
-            color="success"
-            onClick={() => submit(activeSquares, sliderVal)}
-            >
-            Generate
-          </Button>
-        </Stack>
       </div>
     </div>
   );
