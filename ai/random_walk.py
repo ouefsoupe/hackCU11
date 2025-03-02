@@ -2,6 +2,8 @@ import weights
 import numpy as np
 from flask import Flask, jsonify
 from flask_cors import CORS  # Import CORS
+import random
+
 
 app = Flask(__name__)
 
@@ -64,7 +66,11 @@ def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
 
 @app.route('/generate_route', methods=['GET'])
 def get_route():
-    start_x, start_y = 16, 8
+    GRID_WIDTH = 18
+    GRID_HEIGHT = 18
+
+    start_x = random.randint(0, GRID_WIDTH*2 - 3)
+    start_y = random.randint(5, 9)
     num_moves = 7
     sequence = generate_sequence(start_x, start_y, difficulty=4, foot=False, num_moves=num_moves)
 
