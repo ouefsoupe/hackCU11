@@ -48,14 +48,16 @@ export function Board({size=BOARD_SIZE}) {
       }));
       
       const lowestYHold = normalizedHolds.reduce((min, normalizedHolds) => (normalizedHolds.y < min.y ? normalizedHolds : min), normalizedHolds[0]);
+      // const lowestYHold = [...normalizedHolds].sort((a, b) => a.y - b.y)[0];
+    
       console.log("low:", lowestYHold)
       {normalizedHolds.map((hold, index) => {
         const col = hold.x;
         const row = GRID_ROWS - hold.y;
         
-        console.log("hold.y: ", hold.y)
-        console.log("lowesty: ", lowestYHold.y)
-        const strokeColor = hold.y === lowestYHold.y ? "#ff00ff" : "#00ffff";
+        // const strokeColor = hold.y === lowestYHold.y ? "#ff00ff" : "#00ffff";
+        const strokeColor = Math.abs(hold.y - lowestYHold.y) < 0.1 ? "#ff00ff" : "#00ffff";
+        console.log("strokeColor:", strokeColor)
         
         return (
           <g key={index}>
@@ -92,6 +94,9 @@ export function Board({size=BOARD_SIZE}) {
   
 
 
+
+  const lowestYHold = holds.reduce((min, holds) => (holds.y < min.y ? holds : min), holds[0]);
+
   const handleSquareClick = (row, col) => {
     
     const key = `${row}-${col}`;
@@ -115,7 +120,6 @@ export function Board({size=BOARD_SIZE}) {
 
     const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
     const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
-
     setHolds((prevHolds) => {
       const exists = prevHolds.some((hold) => hold.cx == cx && hold.cy == cy)
       return exists ? prevHolds.filter((hold) => hold.cx !== cx || hold.cy !== cy) : [...prevHolds, {cx, cy}];
@@ -185,6 +189,7 @@ export function Board({size=BOARD_SIZE}) {
           // Convert grid positions to actual pixel positions
           const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
           const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
+          const strokeColor = Math.abs(hold.y - lowestYHold.y) < 0.1 ? "#ff00ff" : "#00ffff";
 
           return (
             <g key={index}>
@@ -192,7 +197,7 @@ export function Board({size=BOARD_SIZE}) {
                 cx={cx}
                 cy={cy}
                 r={CIRCLE_RADIUS}
-                stroke="#00ffff"
+                stroke={strokeColor}
                 strokeWidth="4"
                 fill="transparent"
                 style={{ cursor: "pointer" }}
