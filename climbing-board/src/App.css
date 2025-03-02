@@ -61,5 +61,5 @@
   left: 0;
   width: 800px; /* Same as image */
   height: auto;
-  pointer-events: none; /* Prevent blocking interactions */
+  pointer-events: auto; /* Prevent blocking interactions */
 }
