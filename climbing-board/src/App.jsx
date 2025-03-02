@@ -83,6 +83,7 @@ export function Board({route, size=BOARD_SIZE, activeSquares, setActiveSquares})
       [key]: !prev[key],
     }));
 
+
     const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
     const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
 
@@ -186,8 +187,9 @@ export function Board({route, size=BOARD_SIZE, activeSquares, setActiveSquares})
   );
 }
 
-export const submit = (activeSquares) => {
-
+export const submit = (activeSquares, sliderVal) => {
+  for ([key, value] of activeSquares):
+    
 }
 
 
@@ -200,7 +202,7 @@ function App() {
       setActiveSquares={activeSquares}
     ></Board>
   );
- 
+  const [sliderVal, setSliderVal] = useState(0); 
 
   return (
     <div className="container">
@@ -212,6 +214,7 @@ function App() {
       <div className="slider-container">
         <CRangeSlider
           max={128}
+          onChange={setSliderVal}
           labels={[
             {
               value: 0,
@@ -231,7 +234,7 @@ function App() {
           <Button 
             variant="contained" 
             color="success"
-            onClick={submit}
+            onClick={() => submit(activeSquares, sliderVal)}
             >
             Generate
           </Button>
