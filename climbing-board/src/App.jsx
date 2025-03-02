@@ -31,6 +31,7 @@ export function Board({route, size=BOARD_SIZE}) {
 
   const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
   const [holds, setHolds] = useState([]); // Holds for overlay circles
+  
 
 
   // Fetch route from Flask server
@@ -50,7 +51,21 @@ export function Board({route, size=BOARD_SIZE}) {
 
 
   const handleSquareClick = (row, col) => {
+    
     const key = `${row}-${col}`;
+    const selectedKeys = Object.keys(activeSquares).filter(k => activeSquares[k]);
+
+    if (activeSquares[key]) {
+      setActiveSquares((prev) =>({
+        ...prev,
+        [key]: !prev[key],
+      }));
+      return;
+    }
+
+    if (selectedKeys.length >= 2) return;
+
+
     setActiveSquares((prev) =>({
       ...prev,
       [key]: !prev[key],
