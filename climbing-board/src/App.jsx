@@ -31,8 +31,6 @@ export function Board({size=BOARD_SIZE}) {
 
   const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
   const [holds, setHolds] = useState([]); // Holds for overlay circles
-  
-
 
   // Fetch route from Flask server
   useEffect(() => {
@@ -45,9 +43,46 @@ export function Board({size=BOARD_SIZE}) {
       console.log("data: ", data)
 
       const normalizedHolds = data.map(hold => ({
-        x: Math.round((hold.x* 8)),  // Scale `x` properly to grid index
-        y: Math.round(hold.y * 8)   // Scale `y` properly to grid index
+        x: Math.round((hold.x * 9)) + .5,  // Scale `x` properly to grid index
+        y: GRID_COLS - Math.round(hold.y * 9)  // Scale `y` properly to grid index
       }));
+      
+      const lowestYHold = normalizedHolds.reduce((min, normalizedHolds) => (normalizedHolds.y < min.y ? normalizedHolds : min), normalizedHolds[0]);
+      console.log("low:", lowestYHold)
+      {normalizedHolds.map((hold, index) => {
+        const col = hold.x;
+        const row = GRID_ROWS - hold.y;
+        
+        console.log("hold.y: ", hold.y)
+        console.log("lowesty: ", lowestYHold.y)
+        const strokeColor = hold.y === lowestYHold.y ? "#ff00ff" : "#00ffff";
+        console.log(strokeColor)
+        return (
+          <g key={index}>
+            <circle
+              cx={col * SQUARE_SIZE + SQUARE_SIZE}
+              cy={row * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
+              r={CIRCLE_RADIUS}
+              stroke={strokeColor}
+              strokeWidth="4"
+              fill="transparent"
+              style={{ cursor: "pointer" }}
+            />
+            <text
+              x={col * SQUARE_SIZE + SQUARE_SIZE + 15} // Offset text for visibility
+              y={row * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
+              fontSize="14"
+              fill="white"
+              fontWeight="bold"
+              textAnchor="middle"
+            >
+              ({col}, {row})
+            </text>
+          </g>
+        );
+      })}
+      
+
       console.log("Normalized Holds:", normalizedHolds);
 
       setHolds(normalizedHolds);
@@ -133,7 +168,7 @@ export function Board({size=BOARD_SIZE}) {
                   width={SQUARE_SIZE}
                   height={SQUARE_SIZE}
                   fill="transparent"
-                  stroke="black"
+                  stroke="transparent"
                   strokeWidth="1"
                   onClick={() => handleSquareClick(row, col)}
                   style={{ cursor: "pointer" }}
@@ -162,17 +197,6 @@ export function Board({size=BOARD_SIZE}) {
                 fill="transparent"
                 style={{ cursor: "pointer" }}
               />
-              {/* Render (x, y) text next to each hold */}
-              <text
-                x={cx + 20}  // Slight offset so text doesn't overlap
-                y={cy}
-                fontSize="14"
-                fill="white"
-                fontWeight="bold"
-                textAnchor="middle"
-              >
-                ({col}, {row})
-              </text>
             </g>
           );
         })}

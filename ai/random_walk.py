@@ -64,7 +64,7 @@ def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
 def get_route():
     start_x, start_y = 10, 10
     num_moves = 7
-    sequence = generate_sequence(start_x, start_y, difficulty=10, foot=False, num_moves=num_moves)
+    sequence = generate_sequence(start_x, start_y, difficulty=4, foot=False, num_moves=num_moves)
 
     response = [{"x": x / 18, "y": y / 18} for x, y in sequence]
 
