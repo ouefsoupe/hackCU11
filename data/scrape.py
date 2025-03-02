@@ -48,3 +48,20 @@ with open("climbs.json", 'w') as f:
     f.write("]")
 
 print("Found %s runs, dropped %s" % (total_count, dropped_count))
+
+
+
+curr_hold
+next_hold
+
+rel_x = next_hold[0] - curr_hold[0] + RADIUS
+rel_y = next_hold[1] - curr_hold[1] + RADIUS
+index = rel_y * (2*RADIUS + 1) + rel_x
+
+start_x, start_y = 0, 0
+for placement in climb['placements']:
+    if ('type' in placement and placement['type'] == 'START'):
+        start_x = placement['x']
+        start_y = placement['y']
+        break
+climb['placements'] = climb['placements'].sort(key=lambda e: np.abs(['x']-start_x + (e['y']-start_y)**2))
