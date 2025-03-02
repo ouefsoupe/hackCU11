@@ -1,5 +1,11 @@
 import weights
 import numpy as np
+from flask import Flask, jsonify
+from flask_cors import CORS  # Import CORS
+
+app = Flask(__name__)
+
+CORS(app)
 
 weight_matrix = weights.get_weights()
 
@@ -55,10 +61,23 @@ def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
     return sequence   
 
 
-x, y = 6, 9
-num_moves = 8
-sequence = generate_sequence(x, y, difficulty=10, foot=False, num_moves=num_moves)
+@app.route('/generate_route', methods=['GET'])
+def get_route():
+    start_x, start_y = 10, 10
+    num_moves = 5
+    sequence = generate_sequence(start_x, start_y, difficulty=10, foot=False, num_moves=num_moves)
 
-print("Sequential Holds Path:")
-for i, (x, y) in enumerate(sequence):
-    print(f"Move {i + 1}: ({x}, {y})")
+    response = [{"x": x / 18, "y": y / 18} for x, y in sequence]
+    return jsonify(response)
+
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)
+
+
+# x, y = 6, 9
+# num_moves = 8
+# sequence = generate_sequence(x, y, difficulty=10, foot=False, num_moves=num_moves)
+
+# print("Sequential Holds Path:")
+# for i, (x, y) in enumerate(sequence):
+#     print(f"Move {i + 1}: ({x}, {y})")

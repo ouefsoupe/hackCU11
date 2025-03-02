@@ -32,6 +32,23 @@ export function Board({route, size=BOARD_SIZE}) {
   const [activeSquares, setActiveSquares] = useState({}); // Tracks clicked squares
   const [holds, setHolds] = useState([]); // Holds for overlay circles
 
+
+  // Fetch route from Flask server
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/generate_route", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Fetched holds:", data);
+      setHolds(data);
+    })
+    .catch((err) => console.error("Error fetching route:", err));
+  }, []);
+  
+
+
   const handleSquareClick = (row, col) => {
     const key = `${row}-${col}`;
     setActiveSquares((prev) =>({
