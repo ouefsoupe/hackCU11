@@ -63,3 +63,7 @@
   height: auto;
   pointer-events: auto; /* Prevent blocking interactions */
 }
+
+body {
+  background-color: #232323;
+}

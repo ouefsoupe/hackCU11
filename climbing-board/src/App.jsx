@@ -4,6 +4,9 @@ import '@coreui/coreui-pro/dist/css/coreui.min.css';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import "./App.css";
+import React from 'react'
+
+
 
 const sampleRoute = {
   placements: [
@@ -95,6 +98,11 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
 
   const lowestYHold = holds.reduce((min, holds) => (holds.y < min.y ? holds : min), holds[0]);
 
+  const highestYHold = holds.reduce(
+    (max, hold) => (hold.y > max.y ? hold : max), 
+    holds[0]
+  );
+
   const handleSquareClick = (row, col) => {
 
     
@@ -108,9 +116,6 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
       }));
       return;
     }
-
-    if (selectedKeys.length >= 2) return;
-
 
     setActiveSquares((prev) =>({
       ...prev,
@@ -155,7 +160,7 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
                   cy={row * SQUARE_SIZE + 0.5 * SQUARE_SIZE}
                   r={0.45 * SQUARE_SIZE}
                   fill="transparent"
-                  stroke="rgb(0, 255, 0)"
+                  stroke="#ffa500"
                   strokeWidth="5"
                   onClick={() => handleSquareClick(row, col)}
                   style={{ cursor: "pointer" }}
@@ -188,7 +193,8 @@ export function Board({route={}, size=BOARD_SIZE, activeSquares, setActiveSquare
           // Convert grid positions to actual pixel positions
           const cx = col * SQUARE_SIZE + SQUARE_SIZE / 2;
           const cy = row * SQUARE_SIZE + SQUARE_SIZE / 2;
-          const strokeColor = Math.abs(hold.y - lowestYHold.y) < 0.1 ? "#ff00ff" : "#00ffff";
+          const strokeColor = Math.abs(hold.y - lowestYHold.y) < 0.1 ? "#ff00ff" : Math.abs(hold.y - highestYHold.y) < 0.1 ? "#00ff00" : "#00ffff";
+
 
           if (isNaN(cx) || isNaN(cy)) return (<></>);
 
