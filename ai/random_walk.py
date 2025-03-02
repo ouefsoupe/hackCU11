@@ -42,7 +42,7 @@ def next_hold(x, y, difficulty, foot):
     col = index % a.shape[1]
 
     new_x = x + (col - radius)
-    new_y = y + (row - radius)
+    new_y = y + (row - radius) + 1
 
     return (new_x, new_y)
 
@@ -56,7 +56,9 @@ def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
     for _ in range(num_moves):
         x, y = next_hold(x, y, difficulty, foot)
         sequence.append((x, y))
-    
+        if(y == 18):
+            break
+
     return sequence   
 
 
