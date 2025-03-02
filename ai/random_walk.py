@@ -33,7 +33,32 @@ def next_hold(x, y, difficulty, foot):
     a = np.abs(a)
     index = np.argmin(a)
 
-    return ((index % len(a)) + x, (index // len(a)) + y)
+    row = index // a.shape[1]
+    col = index % a.shape[1]
 
-x, y = 10, 10
-print(next_hold(x, y, 10, False))
+    new_x = x + (col - radius)
+    new_y = y + (row - radius)
+
+    return (new_x, new_y)
+
+    # return ((index % len(a)) + x, (index // len(a)) + y)
+
+
+def generate_sequence(start_x, start_y, difficulty, foot, num_moves):
+    sequence = [(start_x, start_y)]
+    
+    x, y = start_x, start_y
+    for _ in range(num_moves):
+        x, y = next_hold(x, y, difficulty, foot)
+        sequence.append((x, y))
+    
+    return sequence   
+
+
+x, y = 6, 9
+num_moves = 8
+sequence = generate_sequence(x, y, difficulty=10, foot=False, num_moves=num_moves)
+
+print("Sequential Holds Path:")
+for i, (x, y) in enumerate(sequence):
+    print(f"Move {i + 1}: ({x}, {y})")
