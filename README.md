@@ -1,5 +1,3 @@
-KILTABORD
-
 ![](demo.png)
 
 ### What it does
@@ -15,3 +13,17 @@ This led us to our final approach, which was an algorithmic inference model that
 ### Challenges we ran into
 We ran into several challenges when trying to create generative AI models to analyze the data. We learned that the models that can work with the amount of data provided/quality of data are not sufficient to learn any patterns. This led us to explore other algorithmic ways to generate our climbs.
 
+### Rules of the board
+Yellow holds are footholds only.
+Green holds are the start holds
+Purple holds are the finish
+Blue holds can be used by hands and feet
+
+### How to run
+1) Clone this repo
+2) cd into climbing-board directory
+3) Inside of react app run: npm install
+4) Run: npm run dev
+5) cd into the ai directory and run random_walk.py
+6) Open the local hosting for the react app and generate climbs!!
+7) You can also select holds to add feet
