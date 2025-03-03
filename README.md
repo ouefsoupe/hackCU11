@@ -1,3 +1,7 @@
+KILTABORD
+
+![](demo.png)
+
 ### What it does
 Generate A Climb uses a standard climbing board with an array of holds as well as a algorythmic predicitve model to generate climbs. It does this my randomly generating start holds, and with user input for desired difficulty, it predicts the other holds in the climb based on distance apart and rated difficulty of the hold.
 
